@@ -1,0 +1,50 @@
+﻿@page "/pharmacies/details"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>PHARMACY</h2>
+    <hr />
+    @if (pharmacy is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@pharmacy.PName</dd>
+            <dt class="col-sm-2">Location</dt>
+            <dd class="col-sm-10">@pharmacy.PLocation</dd>
+            <dt class="col-sm-2">Phone Number</dt>
+            <dd class="col-sm-10">@pharmacy.Phone_number</dd>
+        </dl>
+        <div>
+            <a href="@($"/pharmacies/edit?id={pharmacy.ID}")">Edit</a> |
+            <a href="@($"/pharmacies")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private PHARMACY? pharmacy;
+
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        pharmacy = await context.PHARMACY.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (pharmacy is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+}

@@ -1,0 +1,61 @@
+﻿@page "/customers/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>CUSTOMER</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="CUSTOMER" OnValidSubmit="AddCUSTOMER" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="cname" class="form-label">Name:</label> 
+                <InputText id="cname" @bind-Value="CUSTOMER.CName" class="form-control" /> 
+                <ValidationMessage For="() => CUSTOMER.CName" class="text-danger" /> 
+            </div>
+            <div class="mb-3">
+                <label for="ssn" class="form-label">SSN:</label>
+                <InputText id="ssn" @bind-Value="CUSTOMER.SSN" class="form-control" />
+                <ValidationMessage For="() => CUSTOMER.SSN" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="birth_date" class="form-label">Birth Date:</label> 
+                <InputDate id="birth_date" @bind-Value="CUSTOMER.Birth_date" class="form-control" /> 
+                <ValidationMessage For="() => CUSTOMER.Birth_date" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender:</label> 
+                <InputText id="gender" @bind-Value="CUSTOMER.Gender" class="form-control" /> 
+                <ValidationMessage For="() => CUSTOMER.Gender" class="text-danger" /> 
+            </div>             
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/customers">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private CUSTOMER CUSTOMER { get; set; } = default!;
+
+    protected override void OnInitialized() => CUSTOMER ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddCUSTOMER()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.CUSTOMER.Add(CUSTOMER);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/customers");
+    }
+}

@@ -1,0 +1,46 @@
+﻿@page "/medicine_companies/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>MEDICINE_COMPANY</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="MEDICINE_COMPANY" OnValidSubmit="AddMEDICINE_COMPANY" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="mcname" class="form-label">Name:</label> 
+                <InputText id="mcname" @bind-Value="MEDICINE_COMPANY.MCName" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE_COMPANY.MCName" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/medicine_companies">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private MEDICINE_COMPANY MEDICINE_COMPANY { get; set; } = default!;
+
+    protected override void OnInitialized() => MEDICINE_COMPANY ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddMEDICINE_COMPANY()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.MEDICINE_COMPANY.Add(MEDICINE_COMPANY);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/medicine_companies");
+    }
+}

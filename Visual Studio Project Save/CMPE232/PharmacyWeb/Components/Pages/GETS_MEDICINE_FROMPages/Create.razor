@@ -1,0 +1,66 @@
+﻿@page "/gets_medicine_froms/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>GETS_MEDICINE_FROM</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="GETS_MEDICINE_FROM" OnValidSubmit="AddGETS_MEDICINE_FROM" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="mc_id" class="form-label">Medicine Company ID:</label>
+                <InputNumber id="mc_id" @bind-Value="GETS_MEDICINE_FROM.MC_ID" class="form-control" /> 
+                <ValidationMessage For="() => GETS_MEDICINE_FROM.MC_ID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="pharmacy_id" class="form-label">Pharmacy ID:</label> 
+                <InputNumber id="pharmacy_id" @bind-Value="GETS_MEDICINE_FROM.Pharmacy_ID" class="form-control" /> 
+                <ValidationMessage For="() => GETS_MEDICINE_FROM.Pharmacy_ID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="medicine_id" class="form-label">Medicine ID:</label> 
+                <InputNumber id="medicine_id" @bind-Value="GETS_MEDICINE_FROM.Medicine_ID" class="form-control" /> 
+                <ValidationMessage For="() => GETS_MEDICINE_FROM.Medicine_ID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="buy_amount" class="form-label">Buy Amount:</label> 
+                <InputNumber id="buy_amount" @bind-Value="GETS_MEDICINE_FROM.Buy_amount" class="form-control" /> 
+                <ValidationMessage For="() => GETS_MEDICINE_FROM.Buy_amount" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="transaction_date" class="form-label">Transaction Date:</label> 
+                <InputDate id="transaction_date" @bind-Value="GETS_MEDICINE_FROM.Transaction_date" class="form-control" /> 
+                <ValidationMessage For="() => GETS_MEDICINE_FROM.Transaction_date" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/gets_medicine_froms">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private GETS_MEDICINE_FROM GETS_MEDICINE_FROM { get; set; } = default!;
+
+    protected override void OnInitialized() => GETS_MEDICINE_FROM ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddGETS_MEDICINE_FROM()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.GETS_MEDICINE_FROM.Add(GETS_MEDICINE_FROM);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/gets_medicine_froms");
+    }
+}

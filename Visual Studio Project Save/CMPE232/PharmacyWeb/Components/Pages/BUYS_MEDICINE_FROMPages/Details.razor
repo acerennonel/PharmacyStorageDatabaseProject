@@ -1,0 +1,54 @@
+﻿@page "/buys_medicine_froms/details"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>BUYS_MEDICINE_FROM</h2>
+    <hr />
+    @if (buys_medicine_from is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Customer SSN</dt>
+            <dd class="col-sm-10">@buys_medicine_from.C_SSN</dd>
+            <dt class="col-sm-2">Pharmacy ID</dt>
+            <dd class="col-sm-10">@buys_medicine_from.Pharmacy_ID</dd>
+            <dt class="col-sm-2">Medicine ID</dt>
+            <dd class="col-sm-10">@buys_medicine_from.Medicine_ID</dd>
+            <dt class="col-sm-2">Buy Amount</dt>
+            <dd class="col-sm-10">@buys_medicine_from.Buy_amount</dd>
+            <dt class="col-sm-2">Transaction Date</dt>
+            <dd class="col-sm-10">@buys_medicine_from.Transaction_date</dd>
+        </dl>
+        <div>
+            <a href="@($"/buys_medicine_froms/edit?id={buys_medicine_from.ID}")">Edit</a> |
+            <a href="@($"/buys_medicine_froms")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private BUYS_MEDICINE_FROM? buys_medicine_from;
+
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        buys_medicine_from = await context.BUYS_MEDICINE_FROM.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (buys_medicine_from is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+}

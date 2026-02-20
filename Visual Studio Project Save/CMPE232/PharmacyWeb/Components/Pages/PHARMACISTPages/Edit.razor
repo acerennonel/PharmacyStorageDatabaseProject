@@ -1,0 +1,114 @@
+﻿@page "/pharmacists/edit"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>PHARMACIST</h2>
+<hr />
+@if (PHARMACIST is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="PHARMACIST" OnValidSubmit="UpdatePHARMACIST" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="PHARMACIST.SSN" value="@PHARMACIST.SSN" />
+                <div class="mb-3">
+                    <label for="pname" class="form-label">Name:</label>
+                    <InputText id="pname" @bind-Value="PHARMACIST.PName" class="form-control" />
+                    <ValidationMessage For="() => PHARMACIST.PName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="birth_date" class="form-label">Birth Date:</label>
+                    <InputDate id="birth_date" @bind-Value="PHARMACIST.Birth_date" class="form-control" />
+                    <ValidationMessage For="() => PHARMACIST.Birth_date" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender:</label>
+                    <InputText id="gender" @bind-Value="PHARMACIST.Gender" class="form-control" />
+                    <ValidationMessage For="() => PHARMACIST.Gender" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="salary" class="form-label">Salary:</label>
+                    <InputNumber id="salary" @bind-Value="PHARMACIST.Salary" class="form-control" />
+                    <ValidationMessage For="() => PHARMACIST.Salary" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="pharmacy_id" class="form-label">Pharmacy ID:</label>
+                    <InputNumber id="pharmacy_id" @bind-Value="PHARMACIST.Pharmacy_ID" class="form-control" />
+                    <ValidationMessage For="() => PHARMACIST.Pharmacy_ID" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="leader_ssn" class="form-label">Leader SSN:</label>
+                    <InputText id="leader_ssn" @bind-Value="PHARMACIST.Leader_SSN" class="form-control" />
+                    <ValidationMessage For="() => PHARMACIST.Leader_SSN" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/pharmacists">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private string SSN { get; set; }
+
+    [SupplyParameterFromForm]
+    private PHARMACIST? PHARMACIST { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        PHARMACIST ??= await context.PHARMACIST.FirstOrDefaultAsync(m => m.SSN == SSN);
+
+        if (PHARMACIST is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdatePHARMACIST()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(PHARMACIST!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!PHARMACISTExists(PHARMACIST!.SSN))
+            {
+                NavigationManager.NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/pharmacists");
+    }
+
+    private bool PHARMACISTExists(string ssn)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.PHARMACIST.Any(e => e.SSN == ssn);
+    }
+}

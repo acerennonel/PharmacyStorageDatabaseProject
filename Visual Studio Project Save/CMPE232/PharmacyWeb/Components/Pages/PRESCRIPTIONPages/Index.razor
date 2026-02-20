@@ -1,0 +1,40 @@
+﻿@page "/prescriptions"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DataAccess
+@using PharmacyWeb.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@rendermode InteractiveServer
+
+<PageTitle>Index</PageTitle>
+
+<h1>Prescription</h1>
+
+<p>
+    <a href="prescriptions/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.PRESCRIPTION.AsQueryable()">
+    <PropertyColumn Property="prescription => prescription.Hospital_name" Title="Hospital Name" Sortable="true" />
+    <PropertyColumn Property="prescription => prescription.Doctor_name" Title="Doctor Name" Sortable="true" />
+    <PropertyColumn Property="prescription => prescription.C_SSN" Title="Customer SSN" Sortable="true" />
+    <PropertyColumn Property="prescription => prescription.Mecidine_ID" Title="Mecidine ID" Sortable="true" />
+
+    <TemplateColumn Context="prescription">
+        <a href="@($"prescriptions/edit?id={prescription.ID}")">Edit</a> |
+        <a href="@($"prescriptions/details?id={prescription.ID}")">Details</a> |
+        <a href="@($"prescriptions/delete?id={prescription.ID}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private PharmacyWebContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

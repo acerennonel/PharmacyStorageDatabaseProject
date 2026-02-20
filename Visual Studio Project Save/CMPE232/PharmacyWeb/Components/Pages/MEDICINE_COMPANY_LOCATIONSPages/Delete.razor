@@ -1,0 +1,58 @@
+﻿@page "/medicine_company_locations/delete"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<p>Are you sure you want to delete this?</p>
+<div>
+    <h2>MEDICINE_COMPANY_LOCATIONS</h2>
+    <hr />
+    @if (medicine_company_locations is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Medicine Company ID</dt>
+            <dd class="col-sm-10">@medicine_company_locations.MC_ID</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Location</dt>
+            <dd class="col-sm-10">@medicine_company_locations.MC_location</dd>
+        </dl>
+        <EditForm method="post" Model="medicine_company_locations" OnValidSubmit="DeleteMEDICINE_COMPANY_LOCATIONS" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(medicine_company_locations is null)">Delete</button> |
+            <a href="/medicine_company_locations">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private MEDICINE_COMPANY_LOCATIONS? medicine_company_locations;
+
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        medicine_company_locations = await context.MEDICINE_COMPANY_LOCATIONS.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (medicine_company_locations is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    private async Task DeleteMEDICINE_COMPANY_LOCATIONS()
+    {
+        using var context = DbFactory.CreateDbContext();
+        await context.MEDICINE_COMPANY_LOCATIONS.Where(m => m.ID == ID).ExecuteDeleteAsync();
+        NavigationManager.NavigateTo("/medicine_company_locations");
+    }
+}

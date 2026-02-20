@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PHARMACY_DATABASEModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BUYS_MEDICINE_FROM">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="C_SSN" Type="char" MaxLength="11" Nullable="false" />
+    <Property Name="Pharmacy_ID" Type="int" Nullable="false" />
+    <Property Name="Medicine_ID" Type="int" Nullable="false" />
+    <Property Name="Buy_amount" Type="int" Nullable="false" />
+    <Property Name="Transaction_date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CUSTOMER">
+    <Key>
+      <PropertyRef Name="SSN" />
+    </Key>
+    <Property Name="SSN" Type="char" MaxLength="11" Nullable="false" />
+    <Property Name="CName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Birth_date" Type="date" />
+    <Property Name="Gender" Type="char" MaxLength="1" />
+    <Property Name="Age" Type="int" />
+  </EntityType>
+  <EntityType Name="EMPLOYEE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EName" Type="varchar" MaxLength="30" />
+    <Property Name="Gender" Type="char" MaxLength="1" />
+    <Property Name="Phone_number" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="MC_ID" Type="int" Nullable="false" />
+    <Property Name="Leader_ID" Type="int" />
+  </EntityType>
+  <EntityType Name="GETS_MEDICINE_FROM">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MC_ID" Type="int" Nullable="false" />
+    <Property Name="Pharmacy_ID" Type="int" Nullable="false" />
+    <Property Name="Medicine_ID" Type="int" Nullable="false" />
+    <Property Name="Buy_amount" Type="int" Nullable="false" />
+    <Property Name="Transaction_date" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MEDICINE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="MType" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Amount" Type="int" />
+    <Property Name="Price_in_TL" Type="float" />
+    <Property Name="Pharmacy_ID" Type="int" />
+    <Property Name="MC_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MEDICINE_COMPANY">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MCName" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MEDICINE_COMPANY_LOCATIONS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MC_ID" Type="int" Nullable="false" />
+    <Property Name="MC_location" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PHARMACIST">
+    <Key>
+      <PropertyRef Name="SSN" />
+    </Key>
+    <Property Name="SSN" Type="char" MaxLength="11" Nullable="false" />
+    <Property Name="PName" Type="varchar" MaxLength="30" />
+    <Property Name="Birth_date" Type="date" />
+    <Property Name="Gender" Type="char" MaxLength="1" />
+    <Property Name="Salary" Type="float" />
+    <Property Name="Age" Type="int" />
+    <Property Name="Pharmacy_ID" Type="int" Nullable="false" />
+    <Property Name="Leader_SSN" Type="char" MaxLength="11" />
+  </EntityType>
+  <EntityType Name="PHARMACY">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PName" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="PLocation" Type="varchar" MaxLength="100" />
+    <Property Name="Phone_number" Type="char" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="PRESCRIPTION">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Hospital_name" Type="varchar" MaxLength="30" />
+    <Property Name="Doctor_name" Type="varchar" MaxLength="30" />
+    <Property Name="C_SSN" Type="char" MaxLength="11" Nullable="false" />
+    <Property Name="Mecidine_ID" Type="int" />
+  </EntityType>
+  <Association Name="FK__BUYS_MEDI__C_SSN__52593CB8">
+    <End Role="CUSTOMER" Type="Self.CUSTOMER" Multiplicity="1" />
+    <End Role="BUYS_MEDICINE_FROM" Type="Self.BUYS_MEDICINE_FROM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CUSTOMER">
+        <PropertyRef Name="SSN" />
+      </Principal>
+      <Dependent Role="BUYS_MEDICINE_FROM">
+        <PropertyRef Name="C_SSN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUYS_MEDI__Medic__5441852A">
+    <End Role="MEDICINE" Type="Self.MEDICINE" Multiplicity="1" />
+    <End Role="BUYS_MEDICINE_FROM" Type="Self.BUYS_MEDICINE_FROM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MEDICINE">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="BUYS_MEDICINE_FROM">
+        <PropertyRef Name="Medicine_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__BUYS_MEDI__Pharm__534D60F1">
+    <End Role="PHARMACY" Type="Self.PHARMACY" Multiplicity="1" />
+    <End Role="BUYS_MEDICINE_FROM" Type="Self.BUYS_MEDICINE_FROM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHARMACY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="BUYS_MEDICINE_FROM">
+        <PropertyRef Name="Pharmacy_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__EMPLOYEE__Leader__49C3F6B7">
+    <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="0..1" />
+    <End Role="EMPLOYEE1" Type="Self.EMPLOYEE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EMPLOYEE">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EMPLOYEE1">
+        <PropertyRef Name="Leader_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__EMPLOYEE__MC_ID__48CFD27E">
+    <End Role="MEDICINE_COMPANY" Type="Self.MEDICINE_COMPANY" Multiplicity="1" />
+    <End Role="EMPLOYEE" Type="Self.EMPLOYEE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MEDICINE_COMPANY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="EMPLOYEE">
+        <PropertyRef Name="MC_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__GETS_MEDI__MC_ID__5812160E">
+    <End Role="MEDICINE_COMPANY" Type="Self.MEDICINE_COMPANY" Multiplicity="1" />
+    <End Role="GETS_MEDICINE_FROM" Type="Self.GETS_MEDICINE_FROM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MEDICINE_COMPANY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="GETS_MEDICINE_FROM">
+        <PropertyRef Name="MC_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__GETS_MEDI__Pharm__59063A47">
+    <End Role="PHARMACY" Type="Self.PHARMACY" Multiplicity="1" />
+    <End Role="GETS_MEDICINE_FROM" Type="Self.GETS_MEDICINE_FROM" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHARMACY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="GETS_MEDICINE_FROM">
+        <PropertyRef Name="Pharmacy_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MEDICINE___MC_ID__5BE2A6F2">
+    <End Role="MEDICINE_COMPANY" Type="Self.MEDICINE_COMPANY" Multiplicity="1" />
+    <End Role="MEDICINE_COMPANY_LOCATIONS" Type="Self.MEDICINE_COMPANY_LOCATIONS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MEDICINE_COMPANY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MEDICINE_COMPANY_LOCATIONS">
+        <PropertyRef Name="MC_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MEDICINE__MC_ID__412EB0B6">
+    <End Role="MEDICINE_COMPANY" Type="Self.MEDICINE_COMPANY" Multiplicity="1" />
+    <End Role="MEDICINE" Type="Self.MEDICINE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MEDICINE_COMPANY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MEDICINE">
+        <PropertyRef Name="MC_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__MEDICINE__Pharma__403A8C7D">
+    <End Role="PHARMACY" Type="Self.PHARMACY" Multiplicity="0..1" />
+    <End Role="MEDICINE" Type="Self.MEDICINE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHARMACY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MEDICINE">
+        <PropertyRef Name="Pharmacy_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHARMACIS__Leade__4E88ABD4">
+    <End Role="PHARMACIST" Type="Self.PHARMACIST" Multiplicity="0..1" />
+    <End Role="PHARMACIST1" Type="Self.PHARMACIST" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHARMACIST">
+        <PropertyRef Name="SSN" />
+      </Principal>
+      <Dependent Role="PHARMACIST1">
+        <PropertyRef Name="Leader_SSN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHARMACIS__Pharm__4D94879B">
+    <End Role="PHARMACY" Type="Self.PHARMACY" Multiplicity="1" />
+    <End Role="PHARMACIST" Type="Self.PHARMACIST" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHARMACY">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PHARMACIST">
+        <PropertyRef Name="Pharmacy_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESCRIPT__C_SSN__440B1D61">
+    <End Role="CUSTOMER" Type="Self.CUSTOMER" Multiplicity="1" />
+    <End Role="PRESCRIPTION" Type="Self.PRESCRIPTION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CUSTOMER">
+        <PropertyRef Name="SSN" />
+      </Principal>
+      <Dependent Role="PRESCRIPTION">
+        <PropertyRef Name="C_SSN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PRESCRIPT__Mecid__44FF419A">
+    <End Role="MEDICINE" Type="Self.MEDICINE" Multiplicity="0..1" />
+    <End Role="PRESCRIPTION" Type="Self.PRESCRIPTION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MEDICINE">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PRESCRIPTION">
+        <PropertyRef Name="Mecidine_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PHARMACY_DATABASEModelStoreContainer">
+    <EntitySet Name="BUYS_MEDICINE_FROM" EntityType="Self.BUYS_MEDICINE_FROM" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CUSTOMER" EntityType="Self.CUSTOMER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EMPLOYEE" EntityType="Self.EMPLOYEE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GETS_MEDICINE_FROM" EntityType="Self.GETS_MEDICINE_FROM" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MEDICINE" EntityType="Self.MEDICINE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MEDICINE_COMPANY" EntityType="Self.MEDICINE_COMPANY" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MEDICINE_COMPANY_LOCATIONS" EntityType="Self.MEDICINE_COMPANY_LOCATIONS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PHARMACIST" EntityType="Self.PHARMACIST" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PHARMACY" EntityType="Self.PHARMACY" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRESCRIPTION" EntityType="Self.PRESCRIPTION" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__BUYS_MEDI__C_SSN__52593CB8" Association="Self.FK__BUYS_MEDI__C_SSN__52593CB8">
+      <End Role="CUSTOMER" EntitySet="CUSTOMER" />
+      <End Role="BUYS_MEDICINE_FROM" EntitySet="BUYS_MEDICINE_FROM" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUYS_MEDI__Medic__5441852A" Association="Self.FK__BUYS_MEDI__Medic__5441852A">
+      <End Role="MEDICINE" EntitySet="MEDICINE" />
+      <End Role="BUYS_MEDICINE_FROM" EntitySet="BUYS_MEDICINE_FROM" />
+    </AssociationSet>
+    <AssociationSet Name="FK__BUYS_MEDI__Pharm__534D60F1" Association="Self.FK__BUYS_MEDI__Pharm__534D60F1">
+      <End Role="PHARMACY" EntitySet="PHARMACY" />
+      <End Role="BUYS_MEDICINE_FROM" EntitySet="BUYS_MEDICINE_FROM" />
+    </AssociationSet>
+    <AssociationSet Name="FK__EMPLOYEE__Leader__49C3F6B7" Association="Self.FK__EMPLOYEE__Leader__49C3F6B7">
+      <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+      <End Role="EMPLOYEE1" EntitySet="EMPLOYEE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__EMPLOYEE__MC_ID__48CFD27E" Association="Self.FK__EMPLOYEE__MC_ID__48CFD27E">
+      <End Role="MEDICINE_COMPANY" EntitySet="MEDICINE_COMPANY" />
+      <End Role="EMPLOYEE" EntitySet="EMPLOYEE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__GETS_MEDI__MC_ID__5812160E" Association="Self.FK__GETS_MEDI__MC_ID__5812160E">
+      <End Role="MEDICINE_COMPANY" EntitySet="MEDICINE_COMPANY" />
+      <End Role="GETS_MEDICINE_FROM" EntitySet="GETS_MEDICINE_FROM" />
+    </AssociationSet>
+    <AssociationSet Name="FK__GETS_MEDI__Pharm__59063A47" Association="Self.FK__GETS_MEDI__Pharm__59063A47">
+      <End Role="PHARMACY" EntitySet="PHARMACY" />
+      <End Role="GETS_MEDICINE_FROM" EntitySet="GETS_MEDICINE_FROM" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MEDICINE___MC_ID__5BE2A6F2" Association="Self.FK__MEDICINE___MC_ID__5BE2A6F2">
+      <End Role="MEDICINE_COMPANY" EntitySet="MEDICINE_COMPANY" />
+      <End Role="MEDICINE_COMPANY_LOCATIONS" EntitySet="MEDICINE_COMPANY_LOCATIONS" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MEDICINE__MC_ID__412EB0B6" Association="Self.FK__MEDICINE__MC_ID__412EB0B6">
+      <End Role="MEDICINE_COMPANY" EntitySet="MEDICINE_COMPANY" />
+      <End Role="MEDICINE" EntitySet="MEDICINE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MEDICINE__Pharma__403A8C7D" Association="Self.FK__MEDICINE__Pharma__403A8C7D">
+      <End Role="PHARMACY" EntitySet="PHARMACY" />
+      <End Role="MEDICINE" EntitySet="MEDICINE" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHARMACIS__Leade__4E88ABD4" Association="Self.FK__PHARMACIS__Leade__4E88ABD4">
+      <End Role="PHARMACIST" EntitySet="PHARMACIST" />
+      <End Role="PHARMACIST1" EntitySet="PHARMACIST" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHARMACIS__Pharm__4D94879B" Association="Self.FK__PHARMACIS__Pharm__4D94879B">
+      <End Role="PHARMACY" EntitySet="PHARMACY" />
+      <End Role="PHARMACIST" EntitySet="PHARMACIST" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESCRIPT__C_SSN__440B1D61" Association="Self.FK__PRESCRIPT__C_SSN__440B1D61">
+      <End Role="CUSTOMER" EntitySet="CUSTOMER" />
+      <End Role="PRESCRIPTION" EntitySet="PRESCRIPTION" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PRESCRIPT__Mecid__44FF419A" Association="Self.FK__PRESCRIPT__Mecid__44FF419A">
+      <End Role="MEDICINE" EntitySet="MEDICINE" />
+      <End Role="PRESCRIPTION" EntitySet="PRESCRIPTION" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

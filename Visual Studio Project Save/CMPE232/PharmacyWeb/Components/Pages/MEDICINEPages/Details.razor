@@ -1,0 +1,56 @@
+﻿@page "/medicines/details"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>MEDICINE</h2>
+    <hr />
+    @if (medicine is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@medicine.MName</dd>
+            <dt class="col-sm-2">Type</dt>
+            <dd class="col-sm-10">@medicine.MType</dd>
+            <dt class="col-sm-2">Amount</dt>
+            <dd class="col-sm-10">@medicine.Amount</dd>
+            <dt class="col-sm-2">Price in TL</dt>
+            <dd class="col-sm-10">@medicine.Price_in_TL</dd>
+            <dt class="col-sm-2">Pharmacy ID</dt>
+            <dd class="col-sm-10">@medicine.Pharmacy_ID</dd>
+            <dt class="col-sm-2">Medicine Company ID</dt>
+            <dd class="col-sm-10">@medicine.MC_ID</dd>
+        </dl>
+        <div>
+            <a href="@($"/medicines/edit?id={medicine.ID}")">Edit</a> |
+            <a href="@($"/medicines")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private MEDICINE? medicine;
+
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        medicine = await context.MEDICINE.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (medicine is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+}

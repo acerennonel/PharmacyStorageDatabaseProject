@@ -1,0 +1,50 @@
+﻿@page "/customers/details"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>CUSTOMER</h2>
+    <hr />
+    @if (customer is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@customer.CName</dd>
+            <dt class="col-sm-2">Birth Date</dt>
+            <dd class="col-sm-10">@customer.Birth_date</dd>
+            <dt class="col-sm-2">Gender</dt>
+            <dd class="col-sm-10">@customer.Gender</dd>
+        </dl>
+        <div>
+            <a href="@($"/customers/edit?ssn={customer.SSN}")">Edit</a> |
+            <a href="@($"/customers")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private CUSTOMER? customer;
+
+    [SupplyParameterFromQuery]
+    private string SSN { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        customer = await context.CUSTOMER.FirstOrDefaultAsync(m => m.SSN == SSN);
+
+        if (customer is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+}

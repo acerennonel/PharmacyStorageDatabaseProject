@@ -1,0 +1,99 @@
+﻿@page "/pharmacies/edit"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>PHARMACY</h2>
+<hr />
+@if (PHARMACY is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="PHARMACY" OnValidSubmit="UpdatePHARMACY" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="PHARMACY.ID" value="@PHARMACY.ID" />
+                <div class="mb-3">
+                    <label for="pname" class="form-label">Name:</label>
+                    <InputText id="pname" @bind-Value="PHARMACY.PName" class="form-control" />
+                    <ValidationMessage For="() => PHARMACY.PName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="plocation" class="form-label">Location:</label>
+                    <InputText id="plocation" @bind-Value="PHARMACY.PLocation" class="form-control" />
+                    <ValidationMessage For="() => PHARMACY.PLocation" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="form-label">Phone Number:</label>
+                    <InputText id="phone_number" @bind-Value="PHARMACY.Phone_number" class="form-control" />
+                    <ValidationMessage For="() => PHARMACY.Phone_number" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/pharmacies">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    [SupplyParameterFromForm]
+    private PHARMACY? PHARMACY { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        PHARMACY ??= await context.PHARMACY.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (PHARMACY is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdatePHARMACY()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(PHARMACY!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!PHARMACYExists(PHARMACY!.ID))
+            {
+                NavigationManager.NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/pharmacies");
+    }
+
+    private bool PHARMACYExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.PHARMACY.Any(e => e.ID == id);
+    }
+}

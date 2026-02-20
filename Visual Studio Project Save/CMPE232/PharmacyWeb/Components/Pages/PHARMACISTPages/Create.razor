@@ -1,0 +1,76 @@
+﻿@page "/pharmacists/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>PHARMACIST</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="PHARMACIST" OnValidSubmit="AddPHARMACIST" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="pname" class="form-label">Name:</label> 
+                <InputText id="pname" @bind-Value="PHARMACIST.PName" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACIST.PName" class="text-danger" /> 
+            </div>
+            <div class="mb-3">
+                <label for="ssn" class="form-label">SSN:</label>
+                <InputText id="ssn" @bind-Value="PHARMACIST.SSN" class="form-control" />
+                <ValidationMessage For="() => PHARMACIST.SSN" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="birth_date" class="form-label">Birth Date:</label> 
+                <InputDate id="birth_date" @bind-Value="PHARMACIST.Birth_date" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACIST.Birth_date" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender:</label> 
+                <InputText id="gender" @bind-Value="PHARMACIST.Gender" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACIST.Gender" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="salary" class="form-label">Salary:</label> 
+                <InputNumber id="salary" @bind-Value="PHARMACIST.Salary" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACIST.Salary" class="text-danger" /> 
+            </div>               
+            <div class="mb-3">
+                <label for="pharmacy_id" class="form-label">Pharmacy ID:</label> 
+                <InputNumber id="pharmacy_id" @bind-Value="PHARMACIST.Pharmacy_ID" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACIST.Pharmacy_ID" class="text-danger" /> 
+            </div>
+            <div class="mb-3">
+                <label for="ssn" class="form-label">Leader SSN:</label>
+                <InputText id="ssn" @bind-Value="PHARMACIST.Leader_SSN" class="form-control" />
+                <ValidationMessage For="() => PHARMACIST.Leader_SSN" class="text-danger" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/pharmacists">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private PHARMACIST PHARMACIST { get; set; } = default!;
+
+    protected override void OnInitialized() => PHARMACIST ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddPHARMACIST()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.PHARMACIST.Add(PHARMACIST);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/pharmacists");
+    }
+}

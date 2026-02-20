@@ -1,0 +1,51 @@
+﻿@page "/medicine_company_locations/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>MEDICINE_COMPANY_LOCATIONS</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="MEDICINE_COMPANY_LOCATIONS" OnValidSubmit="AddMEDICINE_COMPANY_LOCATIONS" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="mc_id" class="form-label">Medicine Company ID:</label>
+                <InputNumber id="mc_id" @bind-Value="MEDICINE_COMPANY_LOCATIONS.MC_ID" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE_COMPANY_LOCATIONS.MC_ID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="mc_location" class="form-label">Location:</label> 
+                <InputText id="mc_location" @bind-Value="MEDICINE_COMPANY_LOCATIONS.MC_location" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE_COMPANY_LOCATIONS.MC_location" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/medicine_company_locations">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private MEDICINE_COMPANY_LOCATIONS MEDICINE_COMPANY_LOCATIONS { get; set; } = default!;
+
+    protected override void OnInitialized() => MEDICINE_COMPANY_LOCATIONS ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddMEDICINE_COMPANY_LOCATIONS()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.MEDICINE_COMPANY_LOCATIONS.Add(MEDICINE_COMPANY_LOCATIONS);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/medicine_company_locations");
+    }
+}

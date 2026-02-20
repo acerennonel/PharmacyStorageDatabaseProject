@@ -1,0 +1,38 @@
+﻿@page "/medicine_company_locations"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DataAccess
+@using PharmacyWeb.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@rendermode InteractiveServer
+
+<PageTitle>Index</PageTitle>
+
+<h1>Medicine Company Locations</h1>
+
+<p>
+    <a href="medicine_company_locations/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.MEDICINE_COMPANY_LOCATIONS.AsQueryable()">
+    <PropertyColumn Property="medicine_company_locations => medicine_company_locations.MC_ID" Title="Mecidine Company ID" Sortable="true" />
+    <PropertyColumn Property="medicine_company_locations => medicine_company_locations.MC_location" Title="Location" Sortable="true" />
+
+    <TemplateColumn Context="medicine_company_locations">
+        <a href="@($"medicine_company_locations/edit?id={medicine_company_locations.ID}")">Edit</a> |
+        <a href="@($"medicine_company_locations/details?id={medicine_company_locations.ID}")">Details</a> |
+        <a href="@($"medicine_company_locations/delete?id={medicine_company_locations.ID}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private PharmacyWebContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

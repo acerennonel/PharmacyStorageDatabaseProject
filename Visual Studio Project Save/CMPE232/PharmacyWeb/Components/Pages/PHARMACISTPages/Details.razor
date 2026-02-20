@@ -1,0 +1,56 @@
+﻿@page "/pharmacists/details"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>PHARMACIST</h2>
+    <hr />
+    @if (pharmacist is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@pharmacist.PName</dd>
+            <dt class="col-sm-2">Birth Date</dt>
+            <dd class="col-sm-10">@pharmacist.Birth_date</dd>
+            <dt class="col-sm-2">Gender</dt>
+            <dd class="col-sm-10">@pharmacist.Gender</dd>
+            <dt class="col-sm-2">Salary</dt>
+            <dd class="col-sm-10">@pharmacist.Salary</dd>
+            <dt class="col-sm-2">Pharmacy ID</dt>
+            <dd class="col-sm-10">@pharmacist.Pharmacy_ID</dd>
+            <dt class="col-sm-2">Leader SSN</dt>
+            <dd class="col-sm-10">@pharmacist.Leader_SSN</dd>
+        </dl>
+        <div>
+            <a href="@($"/pharmacists/edit?ssn={pharmacist.SSN}")">Edit</a> |
+            <a href="@($"/pharmacists")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private PHARMACIST? pharmacist;
+
+    [SupplyParameterFromQuery]
+    private string SSN { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        pharmacist = await context.PHARMACIST.FirstOrDefaultAsync(m => m.SSN == SSN);
+
+        if (pharmacist is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+}

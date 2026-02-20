@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DataAccess/DataAccess.csproj" Id="bfcb7cc4-a4fc-4147-9c3a-4cc32f64ac43" />
+  <Project Path="PharmacyWeb/PharmacyWeb.csproj" Id="d789c2cf-4d06-44c0-8a52-c201a66f6198" />
+</Solution>

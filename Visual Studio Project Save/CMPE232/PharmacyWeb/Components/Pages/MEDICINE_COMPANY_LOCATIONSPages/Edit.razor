@@ -1,0 +1,94 @@
+﻿@page "/medicine_company_locations/edit"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>MEDICINE_COMPANY_LOCATIONS</h2>
+<hr />
+@if (MEDICINE_COMPANY_LOCATIONS is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="MEDICINE_COMPANY_LOCATIONS" OnValidSubmit="UpdateMEDICINE_COMPANY_LOCATIONS" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="MEDICINE_COMPANY_LOCATIONS.ID" value="@MEDICINE_COMPANY_LOCATIONS.ID" />
+                <div class="mb-3">
+                    <label for="mc_id" class="form-label">Medicine Company ID:</label>
+                    <InputNumber id="mc_id" @bind-Value="MEDICINE_COMPANY_LOCATIONS.MC_ID" class="form-control" />
+                    <ValidationMessage For="() => MEDICINE_COMPANY_LOCATIONS.MC_ID" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="mc_location" class="form-label">Location:</label>
+                    <InputText id="mc_location" @bind-Value="MEDICINE_COMPANY_LOCATIONS.MC_location" class="form-control" />
+                    <ValidationMessage For="() => MEDICINE_COMPANY_LOCATIONS.MC_location" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/medicine_company_locations">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    [SupplyParameterFromForm]
+    private MEDICINE_COMPANY_LOCATIONS? MEDICINE_COMPANY_LOCATIONS { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        MEDICINE_COMPANY_LOCATIONS ??= await context.MEDICINE_COMPANY_LOCATIONS.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (MEDICINE_COMPANY_LOCATIONS is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateMEDICINE_COMPANY_LOCATIONS()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(MEDICINE_COMPANY_LOCATIONS!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!MEDICINE_COMPANY_LOCATIONSExists(MEDICINE_COMPANY_LOCATIONS!.ID))
+            {
+                NavigationManager.NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/medicine_company_locations");
+    }
+
+    private bool MEDICINE_COMPANY_LOCATIONSExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.MEDICINE_COMPANY_LOCATIONS.Any(e => e.ID == id);
+    }
+}

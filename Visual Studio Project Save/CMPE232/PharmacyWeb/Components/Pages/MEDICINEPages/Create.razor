@@ -1,0 +1,71 @@
+﻿@page "/medicines/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>MEDICINE</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="MEDICINE" OnValidSubmit="AddMEDICINE" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="mname" class="form-label">Name:</label> 
+                <InputText id="mname" @bind-Value="MEDICINE.MName" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE.MName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="mtype" class="form-label">Type:</label> 
+                <InputText id="mtype" @bind-Value="MEDICINE.MType" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE.MType" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount:</label> 
+                <InputNumber id="amount" @bind-Value="MEDICINE.Amount" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE.Amount" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="price_in_tl" class="form-label">Price in TL:</label> 
+                <InputNumber id="price_in_tl" @bind-Value="MEDICINE.Price_in_TL" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE.Price_in_TL" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="pharmacy_id" class="form-label">Pharmacy ID:</label> 
+                <InputNumber id="pharmacy_id" @bind-Value="MEDICINE.Pharmacy_ID" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE.Pharmacy_ID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="mc_id" class="form-label">Medicine Company ID:</label>
+                <InputNumber id="mc_id" @bind-Value="MEDICINE.MC_ID" class="form-control" /> 
+                <ValidationMessage For="() => MEDICINE.MC_ID" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/medicines">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private MEDICINE MEDICINE { get; set; } = default!;
+
+    protected override void OnInitialized() => MEDICINE ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddMEDICINE()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.MEDICINE.Add(MEDICINE);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/medicines");
+    }
+}

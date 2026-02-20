@@ -1,0 +1,56 @@
+﻿@page "/pharmacies/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>PHARMACY</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="PHARMACY" OnValidSubmit="AddPHARMACY" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="pname" class="form-label">Name:</label> 
+                <InputText id="pname" @bind-Value="PHARMACY.PName" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACY.PName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="plocation" class="form-label">Location:</label> 
+                <InputText id="plocation" @bind-Value="PHARMACY.PLocation" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACY.PLocation" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Phone Number:</label> 
+                <InputText id="phone_number" @bind-Value="PHARMACY.Phone_number" class="form-control" /> 
+                <ValidationMessage For="() => PHARMACY.Phone_number" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/pharmacies">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private PHARMACY PHARMACY { get; set; } = default!;
+
+    protected override void OnInitialized() => PHARMACY ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddPHARMACY()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.PHARMACY.Add(PHARMACY);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/pharmacies");
+    }
+}

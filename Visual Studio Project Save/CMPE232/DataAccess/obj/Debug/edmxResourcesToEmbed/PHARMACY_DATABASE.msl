@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PHARMACY_DATABASEModelStoreContainer" CdmEntityContainer="PHARMACY_DATABASEEntities">
+    <EntitySetMapping Name="BUYS_MEDICINE_FROM">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.BUYS_MEDICINE_FROM">
+        <MappingFragment StoreEntitySet="BUYS_MEDICINE_FROM">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="C_SSN" ColumnName="C_SSN" />
+          <ScalarProperty Name="Pharmacy_ID" ColumnName="Pharmacy_ID" />
+          <ScalarProperty Name="Medicine_ID" ColumnName="Medicine_ID" />
+          <ScalarProperty Name="Buy_amount" ColumnName="Buy_amount" />
+          <ScalarProperty Name="Transaction_date" ColumnName="Transaction_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CUSTOMERs">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.CUSTOMER">
+        <MappingFragment StoreEntitySet="CUSTOMER">
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="CName" ColumnName="CName" />
+          <ScalarProperty Name="Birth_date" ColumnName="Birth_date" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EMPLOYEEs">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.EMPLOYEE">
+        <MappingFragment StoreEntitySet="EMPLOYEE">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="EName" ColumnName="EName" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Phone_number" ColumnName="Phone_number" />
+          <ScalarProperty Name="MC_ID" ColumnName="MC_ID" />
+          <ScalarProperty Name="Leader_ID" ColumnName="Leader_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GETS_MEDICINE_FROM">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.GETS_MEDICINE_FROM">
+        <MappingFragment StoreEntitySet="GETS_MEDICINE_FROM">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MC_ID" ColumnName="MC_ID" />
+          <ScalarProperty Name="Pharmacy_ID" ColumnName="Pharmacy_ID" />
+          <ScalarProperty Name="Medicine_ID" ColumnName="Medicine_ID" />
+          <ScalarProperty Name="Buy_amount" ColumnName="Buy_amount" />
+          <ScalarProperty Name="Transaction_date" ColumnName="Transaction_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MEDICINEs">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.MEDICINE">
+        <MappingFragment StoreEntitySet="MEDICINE">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MName" ColumnName="MName" />
+          <ScalarProperty Name="MType" ColumnName="MType" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Price_in_TL" ColumnName="Price_in_TL" />
+          <ScalarProperty Name="Pharmacy_ID" ColumnName="Pharmacy_ID" />
+          <ScalarProperty Name="MC_ID" ColumnName="MC_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MEDICINE_COMPANY">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.MEDICINE_COMPANY">
+        <MappingFragment StoreEntitySet="MEDICINE_COMPANY">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MCName" ColumnName="MCName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MEDICINE_COMPANY_LOCATIONS">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.MEDICINE_COMPANY_LOCATIONS">
+        <MappingFragment StoreEntitySet="MEDICINE_COMPANY_LOCATIONS">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MC_ID" ColumnName="MC_ID" />
+          <ScalarProperty Name="MC_location" ColumnName="MC_location" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHARMACISTs">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.PHARMACIST">
+        <MappingFragment StoreEntitySet="PHARMACIST">
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="PName" ColumnName="PName" />
+          <ScalarProperty Name="Birth_date" ColumnName="Birth_date" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Salary" ColumnName="Salary" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+          <ScalarProperty Name="Pharmacy_ID" ColumnName="Pharmacy_ID" />
+          <ScalarProperty Name="Leader_SSN" ColumnName="Leader_SSN" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHARMACies">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.PHARMACY">
+        <MappingFragment StoreEntitySet="PHARMACY">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="PName" ColumnName="PName" />
+          <ScalarProperty Name="PLocation" ColumnName="PLocation" />
+          <ScalarProperty Name="Phone_number" ColumnName="Phone_number" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRESCRIPTIONs">
+      <EntityTypeMapping TypeName="PHARMACY_DATABASEModel.PRESCRIPTION">
+        <MappingFragment StoreEntitySet="PRESCRIPTION">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Hospital_name" ColumnName="Hospital_name" />
+          <ScalarProperty Name="Doctor_name" ColumnName="Doctor_name" />
+          <ScalarProperty Name="C_SSN" ColumnName="C_SSN" />
+          <ScalarProperty Name="Mecidine_ID" ColumnName="Mecidine_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

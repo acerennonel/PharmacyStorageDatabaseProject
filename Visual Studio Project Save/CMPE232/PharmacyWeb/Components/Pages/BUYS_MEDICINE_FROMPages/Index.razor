@@ -1,0 +1,41 @@
+﻿@page "/buys_medicine_froms"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DataAccess
+@using PharmacyWeb.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@rendermode InteractiveServer
+
+<PageTitle>Index</PageTitle>
+
+<h1>Buys Medicine From</h1>
+
+<p>
+    <a href="buys_medicine_froms/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.BUYS_MEDICINE_FROM.AsQueryable()">
+    <PropertyColumn Property="buys_medicine_from => buys_medicine_from.C_SSN" Title="Customer SSN" Sortable="true" />
+    <PropertyColumn Property="buys_medicine_from => buys_medicine_from.Pharmacy_ID" Title="Pharmacy ID" Sortable="true" />
+    <PropertyColumn Property="buys_medicine_from => buys_medicine_from.Medicine_ID" Title="Medicine ID" Sortable="true" />
+    <PropertyColumn Property="buys_medicine_from => buys_medicine_from.Buy_amount" Title="Buy Amount" Sortable="true" />
+    <PropertyColumn Property="buys_medicine_from => buys_medicine_from.Transaction_date" Title="Transaction Date" Sortable="true" />
+
+    <TemplateColumn Context="buys_medicine_from">
+        <a href="@($"buys_medicine_froms/edit?id={buys_medicine_from.ID}")">Edit</a> |
+        <a href="@($"buys_medicine_froms/details?id={buys_medicine_from.ID}")">Details</a> |
+        <a href="@($"buys_medicine_froms/delete?id={buys_medicine_from.ID}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private PharmacyWebContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

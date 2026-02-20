@@ -1,0 +1,61 @@
+﻿@page "/prescriptions/create"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>PRESCRIPTION</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="PRESCRIPTION" OnValidSubmit="AddPRESCRIPTION" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="hospital_name" class="form-label">Hospital Name:</label> 
+                <InputText id="hospital_name" @bind-Value="PRESCRIPTION.Hospital_name" class="form-control" /> 
+                <ValidationMessage For="() => PRESCRIPTION.Hospital_name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="doctor_name" class="form-label">Doctor Name:</label> 
+                <InputText id="doctor_name" @bind-Value="PRESCRIPTION.Doctor_name" class="form-control" /> 
+                <ValidationMessage For="() => PRESCRIPTION.Doctor_name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="c_ssn" class="form-label">Customer SSN:</label> 
+                <InputText id="c_ssn" @bind-Value="PRESCRIPTION.C_SSN" class="form-control" /> 
+                <ValidationMessage For="() => PRESCRIPTION.C_SSN" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="mecidine_id" class="form-label">Mecidine ID:</label> 
+                <InputNumber id="mecidine_id" @bind-Value="PRESCRIPTION.Mecidine_ID" class="form-control" /> 
+                <ValidationMessage For="() => PRESCRIPTION.Mecidine_ID" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/prescriptions">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private PRESCRIPTION PRESCRIPTION { get; set; } = default!;
+
+    protected override void OnInitialized() => PRESCRIPTION ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddPRESCRIPTION()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.PRESCRIPTION.Add(PRESCRIPTION);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/prescriptions");
+    }
+}

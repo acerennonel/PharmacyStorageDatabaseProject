@@ -1,0 +1,109 @@
+﻿@page "/buys_medicine_froms/edit"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>BUYS_MEDICINE_FROM</h2>
+<hr />
+@if (BUYS_MEDICINE_FROM is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="BUYS_MEDICINE_FROM" OnValidSubmit="UpdateBUYS_MEDICINE_FROM" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="BUYS_MEDICINE_FROM.ID" value="@BUYS_MEDICINE_FROM.ID" />
+                <div class="mb-3">
+                    <label for="c_ssn" class="form-label">Customer SSN:</label>
+                    <InputText id="c_ssn" @bind-Value="BUYS_MEDICINE_FROM.C_SSN" class="form-control" />
+                    <ValidationMessage For="() => BUYS_MEDICINE_FROM.C_SSN" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="pharmacy_id" class="form-label">Pharmacy ID:</label>
+                    <InputNumber id="pharmacy_id" @bind-Value="BUYS_MEDICINE_FROM.Pharmacy_ID" class="form-control" />
+                    <ValidationMessage For="() => BUYS_MEDICINE_FROM.Pharmacy_ID" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="medicine_id" class="form-label">Medicine ID:</label>
+                    <InputNumber id="medicine_id" @bind-Value="BUYS_MEDICINE_FROM.Medicine_ID" class="form-control" />
+                    <ValidationMessage For="() => BUYS_MEDICINE_FROM.Medicine_ID" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="buy_amount" class="form-label">Buy Amount:</label>
+                    <InputNumber id="buy_amount" @bind-Value="BUYS_MEDICINE_FROM.Buy_amount" class="form-control" />
+                    <ValidationMessage For="() => BUYS_MEDICINE_FROM.Buy_amount" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="transaction_date" class="form-label">Transaction Date:</label>
+                    <InputDate id="transaction_date" @bind-Value="BUYS_MEDICINE_FROM.Transaction_date" class="form-control" />
+                    <ValidationMessage For="() => BUYS_MEDICINE_FROM.Transaction_date" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/buys_medicine_froms">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int ID { get; set; }
+
+    [SupplyParameterFromForm]
+    private BUYS_MEDICINE_FROM? BUYS_MEDICINE_FROM { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        BUYS_MEDICINE_FROM ??= await context.BUYS_MEDICINE_FROM.FirstOrDefaultAsync(m => m.ID == ID);
+
+        if (BUYS_MEDICINE_FROM is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateBUYS_MEDICINE_FROM()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(BUYS_MEDICINE_FROM!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!BUYS_MEDICINE_FROMExists(BUYS_MEDICINE_FROM!.ID))
+            {
+                NavigationManager.NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/buys_medicine_froms");
+    }
+
+    private bool BUYS_MEDICINE_FROMExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.BUYS_MEDICINE_FROM.Any(e => e.ID == id);
+    }
+}

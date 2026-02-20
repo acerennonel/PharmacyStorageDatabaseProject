@@ -1,0 +1,43 @@
+﻿@page "/pharmacists"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using DataAccess
+@using PharmacyWeb.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@rendermode InteractiveServer
+
+<PageTitle>Index</PageTitle>
+
+<h1>Pharmacist</h1>
+
+<p>
+    <a href="pharmacists/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.PHARMACIST.AsQueryable()">
+    <PropertyColumn Property="pharmacist => pharmacist.PName" Title="Name" Sortable="true" />
+    <PropertyColumn Property="pharmacist => pharmacist.SSN" Sortable="true" />
+    <PropertyColumn Property="@(pharmacist => pharmacist.Gender == "F" ? "Female" : (pharmacist.Gender == "M" ? "Male" : "N/A"))" Title="Gender" Sortable="true" />
+    <PropertyColumn Property="pharmacist => pharmacist.Birth_date" Title="Birth Date" Sortable="true" />
+    <PropertyColumn Property="pharmacist => pharmacist.Salary" Sortable="true" />
+    <PropertyColumn Property="pharmacist => pharmacist.Pharmacy_ID" Title="Pharmacy ID" Sortable="true" />
+    <PropertyColumn Property="pharmacist => pharmacist.Leader_SSN" Title="Leader SSN" Sortable="true" />
+
+    <TemplateColumn Context="pharmacist">
+        <a href="@($"pharmacists/edit?ssn={pharmacist.SSN}")">Edit</a> |
+        <a href="@($"pharmacists/details?ssn={pharmacist.SSN}")">Details</a> |
+        <a href="@($"pharmacists/delete?ssn={pharmacist.SSN}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private PharmacyWebContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

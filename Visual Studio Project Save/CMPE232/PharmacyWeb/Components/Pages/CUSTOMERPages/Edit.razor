@@ -1,0 +1,99 @@
+﻿@page "/customers/edit"
+@using Microsoft.EntityFrameworkCore
+@using DataAccess
+@inject IDbContextFactory<PharmacyWeb.Data.PharmacyWebContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>CUSTOMER</h2>
+<hr />
+@if (CUSTOMER is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="CUSTOMER" OnValidSubmit="UpdateCUSTOMER" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="CUSTOMER.SSN" value="@CUSTOMER.SSN" />
+                <div class="mb-3">
+                    <label for="cname" class="form-label">Name:</label>
+                    <InputText id="cname" @bind-Value="CUSTOMER.CName" class="form-control" />
+                    <ValidationMessage For="() => CUSTOMER.CName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="birth_date" class="form-label">Birth Date:</label>
+                    <InputDate id="birth_date" @bind-Value="CUSTOMER.Birth_date" class="form-control" />
+                    <ValidationMessage For="() => CUSTOMER.Birth_date" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender:</label>
+                    <InputText id="gender" @bind-Value="CUSTOMER.Gender" class="form-control" />
+                    <ValidationMessage For="() => CUSTOMER.Gender" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/customers">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private string SSN { get; set; }
+
+    [SupplyParameterFromForm]
+    private CUSTOMER? CUSTOMER { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        CUSTOMER ??= await context.CUSTOMER.FirstOrDefaultAsync(m => m.SSN == SSN);
+
+        if (CUSTOMER is null)
+        {
+            NavigationManager.NotFound();
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateCUSTOMER()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(CUSTOMER!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!CUSTOMERExists(CUSTOMER!.SSN))
+            {
+                NavigationManager.NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/customers");
+    }
+
+    private bool CUSTOMERExists(string ssn)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.CUSTOMER.Any(e => e.SSN == ssn);
+    }
+}
