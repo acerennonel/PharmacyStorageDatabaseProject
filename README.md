@@ -30,4 +30,4 @@ Microsoft.EntityFrameworkCore.SqlServer 10.0.1
 Microsoft.EntityFrameworkCore.Tools 10.0.1
 Microsoft.VisualStudio.Web.CodeGeneration.Design 10.0.1
 
-Bu proje; Ayşe Ceren Önel, Bartu Girgin, Bilgi Çağlar Bozkurt ve Selin Simge Kemeriz tarafından yapılmıştır.
+Bu proje; Ayşe Ceren Önel, B. Girgin, B. Ç. Bozkurt ve S. S. Kemeriz tarafından yapılmıştır.
